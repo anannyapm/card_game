@@ -12,10 +12,10 @@ class GameScreen extends StatelessWidget {
     GameController gameController = GameController.gameControllerInstance;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-              'Best Time: ${gameController.bestTime} seconds',
+        title: Obx(() => Text(
+              'Best Time: ${gameController.bestTime.value} seconds',
               style: const TextStyle(fontSize: 18),
-            ),
+            )),
         actions: [
           // Obx(() => IconButton(
           //       onPressed: () => gameController.isTimerActive
@@ -33,8 +33,7 @@ class GameScreen extends StatelessWidget {
       ),
       body: const SafeArea(
         child: Column(
-          children: [TimerWidget(),
-          Expanded(child: GameGrid())],
+          children: [TimerWidget(), Expanded(child: GameGrid())],
         ),
       ),
     );

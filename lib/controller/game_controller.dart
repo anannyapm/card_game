@@ -148,6 +148,7 @@ class GameController extends GetxController {
 
 import 'dart:async';
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -174,20 +175,20 @@ class GameController extends GetxController {
     seconds.value = 0;
   }
 
-  int bestTime = 0;
+  RxInt bestTime = 0.obs;
 
   // SharedPreferences key for storing best time
   static const String bestTimeKey = 'best_time';
 
   Future<void> loadBestTime() async {
     final prefs = await SharedPreferences.getInstance();
-    bestTime = prefs.getInt(bestTimeKey) ?? 0;
+    bestTime.value = prefs.getInt(bestTimeKey) ?? 0;
     update();
   }
 
   Future<void> saveBestTime() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(bestTimeKey, bestTime);
+    await prefs.setInt(bestTimeKey, bestTime.value);
     update();
   }
 
@@ -202,8 +203,8 @@ class GameController extends GetxController {
     if (timer.isActive) {
       _isTimerActive.value = false;
       timer.cancel();
-      if (seconds < bestTime || bestTime == 0) {
-        bestTime = seconds.value;
+      if (seconds < bestTime.value || bestTime.value == 0) {
+        bestTime.value = seconds.value;
         saveBestTime();
       }
     }
@@ -231,16 +232,6 @@ class GameController extends GetxController {
     matchedCount.value = 0;
   }
 
-  // Card game logic
-
-  // List<Map<String, dynamic>> cards = List.generate(
-  //   8,
-  //   (index) => {
-  //     'id': index + 1,
-  //     'isFlipped': false,
-  //     'isMatched': false,
-  //   },
-  // );
   RxList<int> cardValues = [1, 2, 3, 4, 1, 2, 3, 4].obs;
   RxList<bool> isFlipped = List.generate(8, (index) => false).obs;
   RxList<bool> isMatched = List.generate(8, (index) => false).obs;
@@ -289,7 +280,7 @@ class GameController extends GetxController {
         indexes.add(i);
       }
     }
-   
+
     log("$flippedCards - flipped");
     if (flippedCards.length == 2) {
       if (flippedCards[0] == flippedCards[1]) {
@@ -299,6 +290,13 @@ class GameController extends GetxController {
         matchedCount.value += 2;
         if (allCardsMatched) {
           log("win");
+          stopTimer();
+          //bestTime.value = seconds.value;
+          saveBestTime();
+          Get.snackbar("Yay", "You Win!!!!",
+              backgroundColor: Colors.green, colorText: Colors.white);
+          resetGame();
+          startTimer();
         }
       } else {
         for (int i = 0; i < flippedCards.length; i++) {
