@@ -30,7 +30,10 @@ class GameGrid extends StatelessWidget {
                       : Colors.blue,
                   child: Center(
                     child: gameController.isFlipped[index]
-                        ? Text(gameController.shuffleCards[index].toString())
+                        ? Text(
+                            gameController.shuffleCards[index].toString(),
+                            style: const TextStyle(fontSize: 18),
+                          )
                         : Container(),
                   ),
                 )),

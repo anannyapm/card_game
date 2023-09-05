@@ -11,29 +11,40 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     GameController gameController = GameController.gameControllerInstance;
     return Scaffold(
-      appBar: AppBar(
-        title: Obx(() => Text(
-              'Best Time: ${gameController.bestTime.value} seconds',
-              style: const TextStyle(fontSize: 18),
-            )),
-        actions: [
-          // Obx(() => IconButton(
-          //       onPressed: () => gameController.isTimerActive
-          //           ? gameController.stopTimer()
-          //           : gameController.startTimer(),
-          //       icon: gameController.isTimerActive
-          //           ? const Icon(Icons.pause)
-          //           : const Icon(Icons.play_arrow),
-          //     )),
-          IconButton(
-            onPressed: () => gameController.resetGame(),
-            icon: const Icon(Icons.refresh),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              const Center(
+                child: Text(
+                  "Flip Memory Game",
+                  style: TextStyle(fontSize: 25),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(() => Text(
+                        'Best Time: ${gameController.bestTime.value} seconds',
+                        style: const TextStyle(fontSize: 18),
+                      )),
+                  IconButton(
+                    onPressed: () => gameController.resetGame(),
+                    icon: const Icon(Icons.refresh),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const TimerWidget(),
+              const Expanded(child: GameGrid())
+            ],
           ),
-        ],
-      ),
-      body: const SafeArea(
-        child: Column(
-          children: [TimerWidget(), Expanded(child: GameGrid())],
         ),
       ),
     );

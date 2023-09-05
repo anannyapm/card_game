@@ -30,7 +30,6 @@ class TimerWidget extends StatelessWidget {
               child: Icon(
                 Icons.timer,
                 size: 35,
-                
               ),
             ),
             Expanded(
@@ -38,7 +37,6 @@ class TimerWidget extends StatelessWidget {
               child: Obx(() => Text(
                     textAlign: TextAlign.center,
                     "${gameController.seconds} seconds",
-                      
                     style: const TextStyle(
                         fontSize: 20.0, fontWeight: FontWeight.bold),
                   )),
